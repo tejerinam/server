@@ -1,0 +1,90 @@
+GET http://localhost:8000/api/servicios
+###
+GET http://localhost:8000/api/servicios/razonSocialTipo
+###
+GET http://localhost:8000/api/servicios/GetRazonesSocialesServiciosPublicos
+###
+GET http://localhost:8000/api/servicios/getServiciosPublicos
+###
+GET http://localhost:8000/api/servicios/direccionesRazonSocial
+###
+GET http://localhost:8000/api/servicios/descripcionesGastos
+###
+POST http://localhost:8000/api/servicios/razonSocialServicioPublico
+Content-Type: application/json
+
+{
+    "razon_social" : "Aguas Argentinas",
+    "web" : "https://www.aysa.com.ar/"
+}
+###
+POST http://localhost:8000/api/servicios/postLocalRazonSocialServicioPublico
+Content-Type: application/json
+
+{
+    "id_razonsocial" : "36",
+    "direccion" : "Oran",
+    "numero" : "1954",
+    "id_localidad" : "426",
+    "telefono":"(011) 1234-5678",
+    "whatsapp":"(011) 9876-5432",
+    "comentario":"Servicio de agua potable"
+}
+###
+POST http://localhost:8000/api/servicios/postDescripcionGastoServicioPublico
+Content-Type: application/json
+
+{
+    "descripcion" : "Prueba Descripción de Gasto",
+    "periodico" : 1
+}
+###
+POST http://localhost:8000/api/servicios/postGastosServicioPublico
+Content-Type: application/json
+
+{
+    "importe" : "900.23",
+    "fecha_registro" : "2025-04-27T00:00:00Z",
+    "periodo" : "2025-04-27T00:00:00Z",
+    "id_usuario" : "1",
+    "id_gasto" : "1",
+    "id_direccion" : "1",
+    "realizada" : "1",
+    "detalle" : "Prueba de gasto",
+    "id_razonsocial" : "39",
+    "id_tipo":"1"
+}
+###
+
+POST http://localhost:8000/api/servicios/postLocalServicioPublico
+Content-Type: application/json
+
+{
+    "id_razonsocial" : "36",
+    "direccion" : "Corrientes",
+    "numero" : "1200",
+    "id_localidad" : "25",
+    "telefono" : "3123456789",
+    "whatsapp" : "3333333333",
+    "comentario" : "Prueba de Dirección"
+}
+###
+PUT http://localhost:8000/api/servicios/2
+Content-Type: application/json
+
+{
+    "importe" : "180.23",
+    "fecha_registro" : "2025-04-27T00:00:00Z",
+    "periodo" : "2025-04-18T00:00:00Z",
+    "id_usuario" : "1",
+    "id_gasto" : "1",
+    "id_direccion" : "1",
+    "realizada" : "0",
+    "detalle" : "Prueba de gasto Actualización Otra vez",
+    "id_razonsocial" : "36",
+    "id_tipo":"39"
+}
+###
+DELETE http://localhost:8000/api/servicios/1
+###
+DELETE http://localhost:8000/api/servicios/deleteLocalServicioPublico/2

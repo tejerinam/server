@@ -1,0 +1,28 @@
+export default {
+    //Querys de Usuarios
+    GetAllUsers: "SELECT * FROM Usuarios",
+    GetUserById: "SELECT * FROM Usuarios WHERE id_usuario = ",
+    InsertUser: "INSERT INTO Usuarios (usuario, password, fecha_alta) VALUES (@usuario, @password, @fecha_alta)",
+    UpdateUser: "UPDATE Usuarios SET usuario = @usuario, password = @password WHERE id_usuario = @id",
+    DeleteUser: "DELETE FROM Usuarios WHERE id_usuario = ",
+    ExisteUsuario: "SELECT * FROM Usuarios WHERE usuario = ",
+
+    //Querys de Servicios
+    GetTipoRazonSocialServiciosPublicos: "SELECT id_tipo_razon, tipo FROM Razon_Social_Tipos WHERE tipo = 'servicios publicos'",
+    GetRazonesSocialesServiciosPublicos: "SELECT id_razonsocial, razon_social, id_tipo_razon FROM Razones_Sociales WHERE id_tipo_razon = (SELECT id_tipo_razon FROM Razon_Social_Tipos WHERE tipo = 'servicios publicos')",
+    GetTipoProductoServiciosPublicos: "SELECT id_tipo,tipo_producto,descripcion FROM Tipos_Productos WHERE tipo_producto = 'servicios públicos'",
+    InsertRazonSocialServicioPublico: "INSERT INTO Razones_Sociales (razon_social,id_tipo_razon,web) VALUES (@razon_social, @id_tipo_razon, @web)",
+    InsertLocalRazonSocialServicioPublico: "INSERT INTO Locales (id_razonsocial,direccion,numero,id_localidad,telefono,whatsapp,comentario) VALUES (@id_razonsocial, @direccion, @numero, @id_localidad, @telefono, @whatsapp, @comentario)",
+    InsertDescripcionGastoServicioPublico: "INSERT INTO Descripcion_Gastos (descripcion,periodico) VALUES (@descripcion, @periodico)",
+    InsertGastosServicioPublico: "INSERT INTO Gastos (importe,fecha_registro,periodo,id_usuario,id_gasto,id_direccion,id_tipo,realizada,detalle,id_razonsocial,id_marca) VALUES (@importe, @fecha_registro, @periodo, @id_usuario, @id_gasto, @id_direccion, @id_tipo, @realizada, @detalle, @id_razonsocial, @id_marca)",
+    InsertLocalServicioPublico: "INSERT INTO Locales (id_razonsocial,direccion,numero,id_localidad,telefono,whatsapp,comentario) VALUES (@id_razonsocial, @direccion, @numero, @id_localidad, @telefono, @whatsapp, @comentario)",
+    UpdateGastosServicioPublico: "UPDATE Gastos SET importe = @importe, periodo = @periodo, id_usuario = @id_usuario, id_gasto = @id_gasto, id_direccion = @id_direccion, realizada = @realizada, detalle = @detalle, id_razonsocial = @id_razonsocial WHERE id_pago = @id_pago AND id_tipo = @id_tipo",
+    UpdateLocalServicioPublico: "UPDATE Locales SET id_razonsocial = @id_razonsocial, direccion = @direccion, numero = @numero, id_localidad = @id_localidad, telefono = @telefono, whatsapp = @whatsapp, comentario = @comentario WHERE id_direccion = @id_direccion",
+    ExisteIdDireccion: "SELECT * FROM Locales WHERE id_direccion = @id_direccion",
+    DeleteLocalServicioPublico: "DELETE FROM Locales WHERE id_direccion = @id_direccion",
+    DeleteGastoServicioPublico: "DELETE FROM Gastos WHERE id_pago = @id_pago",
+    GastosServiciosList:"SELECT DISTINCT id_razonsocial, razon_social, rst.id_tipo_razon FROM Razones_Sociales as rs INNER JOIN Razon_Social_Tipos as rst ON rs.id_tipo_razon = rst.id_tipo_razon WHERE rst.tipo = 'servicios publicos'",
+    GetDireccionedRazonSocialById:"SELECT DISTINCT id_direccion, direccion, numero, localidad, rs.id_razonsocial, razon_social FROM Razones_Sociales as rs INNER JOIN Locales as l ON rs.id_razonsocial = l.id_razonsocial INNER JOIN Localidad as loc ON l.id_localidad = loc.id_localidad WHERE rs.id_razonsocial > 0;",
+    GetDescripcionesGastos:"SELECT id_gasto,descripcion,periodico FROM Descripcion_Gastos WHERE id_gasto > 0",
+
+}
