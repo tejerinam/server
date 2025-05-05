@@ -4,12 +4,11 @@ import { connectToDatabase, sql } from '../database/connection';
 import querys from '../database/querys';
 
 export const getDireccionedRazonSocialById = async (req: Request, res: Response) => {
-    //const id = req.params.id;
 
     const pool = await connectToDatabase();
 
     const result = await pool.request()
-        //.input('id_razonsocial', sql.Int, id)
+        
         .query(querys.GetDireccionedRazonSocialById);
 
     console.log(result.recordset);
@@ -100,6 +99,26 @@ export const getServiciosPublicos = async (req: Request, res: Response) => {
     }
 }
 
+export const getTiposRazonesSociales = async (req: Request, res: Response) => {
+    
+    const pool = await connectToDatabase();
+    const result = await pool.request().query(querys.GetTiposRazonesSociales);
+
+    console.log(result);
+    
+    if (result) {
+        res.status(200).json({
+            ok: true,
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
 export const getRazonSocialServicioPublico = async (req: Request, res: Response) => {
     const pool = await connectToDatabase();
     const result = await pool.request().query(querys.GetRazonesSocialesServiciosPublicos);
@@ -140,6 +159,24 @@ export const getRazonSocialTipos = async (req: Request, res: Response) => {
 export const getTipoProductosServicios = async (req: Request, res: Response) => {
     const pool = await connectToDatabase();
     const result = await pool.request().query(querys.GetTipoProductoServiciosPublicos);
+
+    if (result) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            dato: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
+export const getGastosServiciosPublicos = async (req: Request, res: Response) => {
+    const pool = await connectToDatabase();
+    const result = await pool.request().query(querys.GetGastosEnServicios);
 
     if (result) {
         res.status(200).json({ 
@@ -523,7 +560,7 @@ export const deleteGastosServicioPublico = async (req: Request, res: Response): 
         console.error('Error al conectar a la base de datos:', error);  
         return res.json({
             status: 500,
-            ok: true,
+            ok: false,
             msg: "Error al borrar Gastos.",
             error,
         });

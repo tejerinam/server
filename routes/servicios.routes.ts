@@ -5,7 +5,7 @@ import { getServiciosPublicos, getRazonSocialTipos, getTipoProductosServicios,
     postLocalServicioPublico, putGastosServicioPublico,
     putLocalServicioPublico, deleteGastosServicioPublico,
     deleteLocalServicioPublico, getRazonSocialServicioPublico, getDireccionedRazonSocialById,
-    getDescripcionesGastos } from '../controllers/servicios.controller';
+    getDescripcionesGastos, getTiposRazonesSociales, getGastosServiciosPublicos } from '../controllers/servicios.controller';
 
 
 const router = Router();
@@ -16,6 +16,8 @@ router.get('/razonSocialTipoProducto', getTipoProductosServicios);
 router.get('/razonSocialServicioPublico', getRazonSocialServicioPublico);
 router.get('/direccionesRazonSocial', getDireccionedRazonSocialById);
 router.get('/descripcionesGastos', getDescripcionesGastos);
+router.get('/tiposRazonesSociales', getTiposRazonesSociales);
+router.get('/gastosEnServicios', getGastosServiciosPublicos);
 
 //Posts
 router.post('/razonSocialServicioPublico', postRazonSocialServicioPublico);

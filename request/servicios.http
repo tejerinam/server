@@ -10,6 +10,10 @@ GET http://localhost:8000/api/servicios/direccionesRazonSocial
 ###
 GET http://localhost:8000/api/servicios/descripcionesGastos
 ###
+Get http://localhost:8000/api/servicios/tiposRazonesSociales
+###
+GET http://localhost:8000/api/servicios/gastosEnServicios HTTP/1.1
+###
 POST http://localhost:8000/api/servicios/razonSocialServicioPublico
 Content-Type: application/json
 
@@ -35,8 +39,8 @@ POST http://localhost:8000/api/servicios/postDescripcionGastoServicioPublico
 Content-Type: application/json
 
 {
-    "descripcion" : "Prueba Descripción de Gasto",
-    "periodico" : 1
+    "descripcion" : "Nuevo Gasto",
+    "periodico" : 0
 }
 ###
 POST http://localhost:8000/api/servicios/postGastosServicioPublico
