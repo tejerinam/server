@@ -60,7 +60,69 @@ export const getGastosServiciosPublicosById = async (req: Request, res: Response
     
     const result = await pool.request().query(querys.GastosServiciosList);
 
+    console.log(querys.GastosServiciosList);
 
+    if (result) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
+/* export const postLocal = async (req: Request, res:Response) => {
+
+    const { body } = req;
+
+    if (!body.direccion || !body.numero || !body.id_localidad ||
+        !body.id_razonsocial) {
+            res.status(400).json({
+                ok: false,
+                msg: 'Campo faltante, los campos obligatorios son:\nDirección,\nNúmero,\nLocalidad,\nRazón Social.',
+            });
+            return;
+    }
+
+    const pool = await connectToDatabase();
+
+    pool.request()
+
+    const result = await pool.request()
+                             .input('direccion', sql.VarChar, body.direccion)
+                             .input('numero', sql.VarChar, body.numero)
+                             .input('id_localidad', sql.Int, body.id_localidad)
+                             .input('id_razonsocial', sql.VarChar, body.id_razonsocial)
+                             .input('telefono', sql.VarChar, body.telefono ? body.telefono : '')
+                             .input('whatsapp', sql.VarChar, body.whatsapp ? body.telefono : '')
+                             .input('comentario', sql.VarChar, body.comentario ? body.comentario : '')
+                             .query(querys.postLocal);
+
+    console.log(querys.postLocal);
+
+    if (result.rowsAffected.length > 0) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+} */
+
+export const GetLocalidades = async (req: Request, res:Response) => {
+
+    const pool = await connectToDatabase();
+    const result = await pool.request().query(querys.GetLocalidades);
 
     console.log(querys.GastosServiciosList);
 
@@ -248,11 +310,11 @@ export const postLocalRazonSocialServicioPublico = async (req: Request, res: Res
 
     const { body } = req;
 
-    if (!body.id_razonsocial) {
+    if (!body.id_razonsocial || !body.direccion || !body.numero || !body.id_localidad) {
         return res.json({
             status: 400,
             ok: false,
-            msg: "Debe ingresar una Razon Social."
+            msg: "Campo faltante, los campos obligatorios son:\nDirección,\nNúmero,\nLocalidad,\nRazón Social."
         });
     }
 
@@ -263,9 +325,9 @@ export const postLocalRazonSocialServicioPublico = async (req: Request, res: Res
                                            .input('direccion', sql.VarChar, body.direccion)
                                            .input('numero', sql.VarChar, body.numero)
                                            .input('id_localidad', sql.VarChar, body.id_localidad)
-                                           .input('telefono', sql.VarChar, body.telefono)
-                                           .input('whatsapp', sql.VarChar, body.whatsapp)
-                                           .input('comentario', sql.VarChar, body.comentario)
+                                           .input('telefono', sql.VarChar, body.telefono ? body.telefono : '')
+                                           .input('whatsapp', sql.VarChar, body.whatsapp ? body.whatsapp : '')
+                                           .input('comentario', sql.VarChar, body.comentario ? body.comentario : '')
                                            .query(querys.InsertLocalRazonSocialServicioPublico);
         
         return res.json({

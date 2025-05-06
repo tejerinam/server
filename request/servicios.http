@@ -1,3 +1,5 @@
+GET http://localhost:8000/api/servicios/localidades
+###
 GET http://localhost:8000/api/servicios
 ###
 GET http://localhost:8000/api/servicios/razonSocialTipo
@@ -26,10 +28,10 @@ POST http://localhost:8000/api/servicios/postLocalRazonSocialServicioPublico
 Content-Type: application/json
 
 {
-    "id_razonsocial" : "36",
-    "direccion" : "Oran",
+    "id_razonsocial" : "",
+    "direccion" : "Oran 1",
     "numero" : "1954",
-    "id_localidad" : "426",
+    "id_localidad" : "421",
     "telefono":"(011) 1234-5678",
     "whatsapp":"(011) 9876-5432",
     "comentario":"Servicio de agua potable"
