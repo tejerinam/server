@@ -1,4 +1,16 @@
+GET http://localhost:8000/api/servicios/GetServiciosAPagarFechasPorVencer
+###
+GET http://localhost:8000/api/servicios/GetServiciosAPagarFechasVencida
+###
+GET http://localhost:8000/api/servicios/GetServiciosAPagarFechas?realizada=1&desde=2025-04-01T00:00:00Z&hasta=2025-07-30T00:00:00Z
+//Content-Type: application/json
 
+//{
+//    "realizada" : "1",
+//    "desde" : "2025-04-01T00:00:00Z",
+//    "hasta" : "2025-07-30T00:00:00Z"
+//}
+###
 GET http://localhost:8000/api/servicios/GetServiciosAPagar
 ###
 GET http://localhost:8000/api/servicios/localidades

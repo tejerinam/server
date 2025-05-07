@@ -306,6 +306,118 @@ export const postRazonSocialServicioPublico = async (req: Request, res: Response
     }
 }
 
+export const GetServiciosAPagarFechasPorVencer = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { body } = req;
+
+        const pool = await connectToDatabase();
+        
+        console.log(body);
+
+        const result = await pool.request().query(querys.GetServiciosAPagarFechasPorVencer);
+        
+        if (result.recordset.length === 0) {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "No se encontraron registros."
+            });
+        }
+
+        return res.json({
+            status: 200,
+            ok: true,
+            msg: "Registros devueltos.",
+            dato: result.recordset,
+        });
+
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error);  
+        return res.json({
+            status: 500,
+            ok: true,
+            msg: "Error al crear el Local.",
+            error,
+        });
+    }
+}
+
+export const GetServiciosAPagarFechasVencida = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { body } = req;
+
+        const pool = await connectToDatabase();
+        
+        console.log(body);
+
+        const result = await pool.request().query(querys.GetServiciosAPagarFechasVencida);
+        
+        if (result.recordset.length === 0) {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "No se encontraron registros."
+            });
+        }
+
+        return res.json({
+            status: 200,
+            ok: true,
+            msg: "Registros devueltos.",
+            dato: result.recordset,
+        });
+
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error);  
+        return res.json({
+            status: 500,
+            ok: true,
+            msg: "Error al crear el Local.",
+            error,
+        });
+    }
+}
+
+export const GetServiciosAPagarFechas = async (req: Request, res: Response): Promise<any> => {
+    try {
+        
+        const { realizada, desde, hasta } = req.query;
+
+        const pool = await connectToDatabase();
+        
+        console.log(realizada, desde, hasta);
+
+        const result = await pool.request().input('realizada', sql.Int, realizada)
+                                           .input('desde', sql.DateTime, desde)
+                                           .input('hasta', sql.DateTime, hasta)
+                                           .query(querys.GetServiciosAPagarFechas);
+        
+        if (result.recordset.length === 0) {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "No se encontraron registros."
+            });
+        }
+
+        return res.json({
+            status: 200,
+            ok: true,
+            msg: "Registros devueltos.",
+            dato: result.recordset,
+        });
+
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error);  
+        return res.json({
+            status: 500,
+            ok: true,
+            msg: "Error al crear el Local.",
+            error,
+        });
+    }
+}
+
 export const getServiciosAPagar = async (req: Request, res: Response): Promise<any> => {
     try {
         const pool = await connectToDatabase();
