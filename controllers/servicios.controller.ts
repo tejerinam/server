@@ -306,11 +306,46 @@ export const postRazonSocialServicioPublico = async (req: Request, res: Response
     }
 }
 
-export const postLocalRazonSocialServicioPublico = async (req: Request, res: Response): Promise<any> => {
+export const getServiciosAPagar = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const pool = await connectToDatabase();
+        
+        const result = await pool.request().query(querys.GetServiciosAPagar);
+        
+        if (result.recordset.length === 0) {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "El tipo servicio público no existe."
+            });
+        }
+
+        return res.json({
+            status: 200,
+            ok: true,
+            msg: "Servicios sin pagar.",
+            dato: result.recordset,
+        });
+
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error);  
+        return res.json({
+            status: 500,
+            ok: true,
+            msg: "Error al crear el Local.",
+            error,
+        });
+    }
+} 
+
+export const postLocalRazonSocialServicioPublico = async (req: Request, res: Response): Promise<any>  => {
 
     const { body } = req;
 
-    if (!body.id_razonsocial || !body.direccion || !body.numero || !body.id_localidad) {
+    if (!body.id_razonsocial || !body.direccion || !body.numero || !body.id_localidad ||
+        parseInt(body.id_razonsocial) === 0 || parseInt(body.id_localidad) === 0 || body.direccion === '' ||
+        body.numero === '')
+    {
         return res.json({
             status: 400,
             ok: false,
@@ -537,6 +572,57 @@ export const putGastosServicioPublico = async (req: Request, res: Response): Pro
             status: 500,
             ok: true,
             msg: "Error al Actualizar Gasto.",
+            error,
+        });
+    }
+}
+
+export const putRegistrarPagado = async (req: Request, res: Response): Promise<any> => {
+    const { body } = req;
+    const { id } = req.params;
+
+    console.log(body);
+    console.log(id);
+
+    if (!id) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe seleccionar un registro a pagars." + id,
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        
+        const result = await pool.request().input('id_pago', sql.Int, id)
+                                     .input('importe', sql.Decimal, body.importe)
+                                     .input('realizada', sql.Bit, body.pagado)
+                                     .query(querys.UpdateServicioPagado);
+        
+        if (result.rowsAffected[0] === 1){
+            return res.json({
+                status: 200,
+                ok: true,
+                msg: "Registro Actualizado con éxito.",
+                result,
+            });
+        }
+        else
+        {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "No se pudo actualizar el registro.",
+            });
+        }
+        
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error);  
+        return res.json({
+            status: 500,
+            ok: true,
+            msg: "Error al Actualizar registro.",
             error,
         });
     }

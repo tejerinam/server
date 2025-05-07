@@ -1,3 +1,6 @@
+
+GET http://localhost:8000/api/servicios/GetServiciosAPagar
+###
 GET http://localhost:8000/api/servicios/localidades
 ###
 GET http://localhost:8000/api/servicios
@@ -28,10 +31,10 @@ POST http://localhost:8000/api/servicios/postLocalRazonSocialServicioPublico
 Content-Type: application/json
 
 {
-    "id_razonsocial" : "",
-    "direccion" : "Oran 1",
+    "id_razonsocial" : "2",
+    "direccion" : "Oran",
     "numero" : "1954",
-    "id_localidad" : "421",
+    "id_localidad" : "2",
     "telefono":"(011) 1234-5678",
     "whatsapp":"(011) 9876-5432",
     "comentario":"Servicio de agua potable"
@@ -89,6 +92,15 @@ Content-Type: application/json
     "detalle" : "Prueba de gasto Actualización Otra vez",
     "id_razonsocial" : "36",
     "id_tipo":"39"
+}
+###
+PUT http://localhost:8000/api/servicios/putRegistrarPagado/2
+Content-Type: application/json
+
+{
+    "importe" : "1982",
+    "id" : 1,
+    "pagado" : 0
 }
 ###
 DELETE http://localhost:8000/api/servicios/1
