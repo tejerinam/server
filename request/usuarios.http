@@ -6,8 +6,8 @@ POST http://localhost:8000/api/usuarios/
 Content-Type: application/json
 
 {
-    "usuario":"martin",
-    "password":"martin",
+    "usuario":"miguel",
+    "password":"miguel",
     "fecha_alta":"2025-04-26 21:48:00"
 }
 ###

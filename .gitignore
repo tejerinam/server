@@ -8727,3 +8727,5 @@ dist/routes/servicios.routes.js
 dist/routes/servicios.routes.js.map
 dist/routes/usuarios.routes.js
 dist/routes/usuarios.routes.js.map
+dist/controllers/gastos.controller.js
+dist/controllers/gastos.controller.js.map

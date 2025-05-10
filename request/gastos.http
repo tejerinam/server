@@ -1,0 +1,24 @@
+GET http://localhost:8000/api/gastos
+###
+GET http://localhost:8000/api/gastos/getMarcas
+###
+GET http://localhost:8000/api/gastos/GetDireccionGastosGenerales
+###
+GET http://localhost:8000/api/gastos/GetRazonIdByIdDireccion?id=1
+###
+POST http://localhost:8000/api/gastos/postGastosGenerales
+Content-Type: application/json
+
+{
+    "importe" : "1500.23",
+    "fecha_registro" : "2025-04-27T00:00:00Z",
+    "periodo" : "2025-04-27T00:00:00Z",
+    "id_usuario" : "1",
+    "id_gasto" : "1",
+    "id_direccion" : "1",
+    "realizada" : "1",
+    "detalle" : "Prueba de gasto",
+    "id_tipo":"1",
+    "id_marca":"1"
+}
+###
