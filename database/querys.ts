@@ -36,5 +36,7 @@ export default {
     GetMarcas: "SELECT id_marca, marca FROM Marcas_Productos WHERE id_marca > 0",
     GetDireccionGastosGenerales: "SELECT id_direccion, TRIM(direccion + ' ' + numero + ' ' + isnull(loc.localidad,'') + ' ' + ISNULL(p.provincia,'') + ' (' + razon_social + ')') as 'direccion' FROM Razones_Sociales AS rs INNER JOIN Locales AS l ON l.id_razonsocial = rs.id_razonsocial LEFT JOIN Localidad AS loc ON loc.id_localidad = l.id_localidad LEFT JOIN Provincias AS p ON p.id_provincia = loc.id_provincia WHERE l.id_direccion > 0 AND id_tipo_razon <> (SELECT id_tipo_razon from Razon_Social_Tipos WHERE tipo = 'servicios publicos')",
     InsertGastosGenerales: "INSERT INTO Gastos (importe,fecha_registro,periodo,id_gasto,id_direccion,id_tipo,realizada,detalle,id_razonsocial,id_marca,id_usuario) VALUES (@importe,@fecha_registro,@periodo,@id_gasto,@id_direccion,@id_tipo,@realizada,@detalle,@id_razonsocial,@id_marca,@id_usuario)",
-    GetIdRazonByIdDireccion: "SELECT id_razonsocial FROM locales WHERE id_direccion = @id"
+    GetIdRazonByIdDireccion: "SELECT id_razonsocial FROM locales WHERE id_direccion = @id",
+    InsertTipoProducto: "INSERT INTO Tipos_Productos (tipo_producto,descripcion) VALUES (@tipo_producto, @descripcion)",
+    InsertMarca:"INSERT INTO Marcas_Productos (marca) VALUES (@marca)",
 }

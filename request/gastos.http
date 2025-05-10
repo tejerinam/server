@@ -22,3 +22,17 @@ Content-Type: application/json
     "id_marca":"1"
 }
 ###
+POST http://localhost:8000/api/gastos/postTipoProducto
+Content-Type: application/json
+
+{
+    "tipo_producto" : "Prueba 4",
+    "descripcion" : "Prueba de Tipo de Producto"
+}
+###
+POST http://localhost:8000/api/gastos/postMarca
+Content-Type: application/json
+
+{
+    "Marca" : "Prueba 4"
+}

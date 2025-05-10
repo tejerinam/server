@@ -94,6 +94,100 @@ export const getMarcas = async (req: Request, res: Response) => {
     }
 }
 
+
+export const postMarca = async (req:Request, res:Response): Promise<any> => {
+    const { body } = req;
+    
+    console.log(body);
+
+    if (!body.Marca) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe ingresar una Marca de producto.",
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        
+        const result = await pool.request()
+                                .input('marca', sql.VarChar, body.Marca)
+                                .query(querys.InsertMarca);
+        
+        console.log(result);
+
+        if (result.rowsAffected[0] === 0) {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "La marca de producto no se ingreso."
+            });
+        }
+
+        return res.json({
+            status: 200,
+            ok: true,
+            msg: "Marca de Producto Creado.",
+            result,
+        });
+    } catch (error) {
+        return res.json({
+            status: 500,
+            ok: false,
+            msg: "Error al crear Marca de Producto.",
+            error,
+        });
+    }
+}
+
+export const postTipoProducto = async (req:Request, res:Response): Promise<any> => {
+    const { body } = req;
+    
+    console.log(body);
+
+    if (!body.tipo_producto) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe ingresar un importe, y local de Gasto.",
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        
+        const result = await pool.request()
+                                .input('tipo_producto', sql.VarChar, body.tipo_producto)
+                                .input('descripcion', sql.VarChar, body.descripcion)
+                                .query(querys.InsertTipoProducto);
+        
+        console.log(result);
+
+        if (result.rowsAffected[0] === 0) {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "El tipo de producto no se ingreso."
+            });
+        }
+
+        return res.json({
+            status: 200,
+            ok: true,
+            msg: "Tipo de Producto Creado.",
+            result,
+        });
+    } catch (error) {
+        return res.json({
+            status: 500,
+            ok: false,
+            msg: "Error al crear Tipo de Producto.",
+            error,
+        });
+    }
+}
+
 export const postGastosGenerales = async (req:Request, res:Response): Promise<any> => {
     const { body } = req;
     
