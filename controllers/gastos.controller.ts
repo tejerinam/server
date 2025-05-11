@@ -24,6 +24,48 @@ export const getProductosGastos = async (req: Request, res: Response) => {
     }
 }
 
+export const GetZonas = async (req: Request, res: Response) => {
+    const pool = await connectToDatabase();
+
+    const result = await pool.request().query(querys.GetZonas);
+
+    console.log(result.recordset);
+
+    if (result) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
+export const GetProvincias = async (req: Request, res: Response) => {
+    const pool = await connectToDatabase();
+
+    const result = await pool.request().query(querys.GetProvincias);
+
+    console.log(result.recordset);
+
+    if (result) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
 export const GetDireccionGastosGenerales = async (req: Request, res: Response) => {
 
     const pool = await connectToDatabase();
@@ -94,6 +136,53 @@ export const getMarcas = async (req: Request, res: Response) => {
     }
 }
 
+export const postLocalidad = async (req:Request, res:Response): Promise<any> => {
+    const { body } = req;
+    
+    console.log(body);
+
+    if (!body.localidad) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe ingresar una localidad.",
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        
+        const result = await pool.request()
+                                .input('localidad', sql.VarChar, body.localidad)
+                                .input('id_provincia', sql.Int, body.provincia)
+                                .input('id_zona', sql.Int, body.zona)
+                                .query(querys.InsertLocalidad);
+        
+        console.log(result);
+
+        if (result.rowsAffected[0] === 0) {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "La localidad no se ingreso."
+            });
+        }
+
+        return res.json({
+            status: 200,
+            ok: true,
+            msg: "Localidad Creada.",
+            result,
+        });
+    } catch (error) {
+        return res.json({
+            status: 500,
+            ok: false,
+            msg: "Error al crear Localidad.",
+            error,
+        });
+    }
+}
 
 export const postMarca = async (req:Request, res:Response): Promise<any> => {
     const { body } = req;

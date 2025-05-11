@@ -2,6 +2,10 @@ GET http://localhost:8000/api/gastos
 ###
 GET http://localhost:8000/api/gastos/getMarcas
 ###
+GET http://localhost:8000/api/gastos/getProvincias
+###
+GET http://localhost:8000/api/gastos/getZonas
+###
 GET http://localhost:8000/api/gastos/GetDireccionGastosGenerales
 ###
 GET http://localhost:8000/api/gastos/GetRazonIdByIdDireccion?id=1
@@ -35,4 +39,13 @@ Content-Type: application/json
 
 {
     "Marca" : "Prueba 4"
+}
+###
+POST http://localhost:8000/api/gastos/postLocalidad
+Content-Type: application/json
+
+{
+    "localidad" : "Prueba",
+    "provincia" : "1",
+    "zona" : "2"
 }

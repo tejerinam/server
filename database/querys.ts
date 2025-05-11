@@ -39,4 +39,8 @@ export default {
     GetIdRazonByIdDireccion: "SELECT id_razonsocial FROM locales WHERE id_direccion = @id",
     InsertTipoProducto: "INSERT INTO Tipos_Productos (tipo_producto,descripcion) VALUES (@tipo_producto, @descripcion)",
     InsertMarca:"INSERT INTO Marcas_Productos (marca) VALUES (@marca)",
+    GetProvincias:"SELECT id_provincia, provincia FROM Provincias WHERE id_provincia > 0",
+    GetZonas: "SELECT id_zona, zona FROM Zonas WHERE id_zona > 0",
+    InsertLocalidad: "INSERT INTO Localidad (localidad,id_provincia,id_zona) VALUES (@localidad, @id_provincia, @id_zona)"
+
 }
