@@ -53,3 +53,10 @@ Content-Type: application/json
 }
 ###
 DELETE http://localhost:8000/api/gastos/deleteGastoGeneral/30018
+###
+POST http://localhost:8000/api/gastos/postZona
+Content-Type: application/json
+
+{
+    "zona" : "Prueba"
+}

@@ -193,6 +193,52 @@ export const GetGastosGenerales = async (req: Request, res: Response) => {
 }
 
 
+export const postZona = async (req:Request, res:Response): Promise<any> => {
+    const { body } = req;
+    
+    console.log(body);
+
+    if (!body.zona) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe ingresar una Zona.",
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        
+        const result = await pool.request()
+                                .input('zona', sql.VarChar, body.zona)
+                                .query(querys.InsertZona);
+        
+        console.log(result);
+
+        if (result.rowsAffected[0] === 0) {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "La zona no se ingreso."
+            });
+        }
+
+        return res.json({
+            status: 200,
+            ok: true,
+            msg: "Zona Creada.",
+            result,
+        });
+    } catch (error) {
+        return res.json({
+            status: 500,
+            ok: false,
+            msg: "Error al crear Zona.",
+            error,
+        });
+    }
+}
+
 
 export const postLocalidad = async (req:Request, res:Response): Promise<any> => {
     const { body } = req;

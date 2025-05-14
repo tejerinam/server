@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getProductosGastos, getMarcas, GetDireccionGastosGenerales, postGastosGenerales,
     GetRazonIdByIdDireccion, postTipoProducto, postMarca, GetProvincias, GetZonas,
-    postLocalidad, GetGastosGenerales, deleteGastoGeneral } from '../controllers/gastos.controller';
+    postLocalidad, GetGastosGenerales, deleteGastoGeneral, postZona } from '../controllers/gastos.controller';
 
 const router = Router();
 
@@ -16,6 +16,7 @@ router.post('/postGastosGenerales', postGastosGenerales);
 router.post('/postTipoProducto', postTipoProducto)
 router.post('/postMarca', postMarca);
 router.post('/postLocalidad', postLocalidad);
+router.post('/postZona', postZona);
 router.delete('/deleteGastoGeneral/:id', deleteGastoGeneral);
 
 export default router;
