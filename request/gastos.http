@@ -10,6 +10,8 @@ GET http://localhost:8000/api/gastos/GetDireccionGastosGenerales
 ###
 GET http://localhost:8000/api/gastos/GetRazonIdByIdDireccion?id=1
 ###
+GET http://localhost:8000/api/gastos/getGastosGenerales
+###
 POST http://localhost:8000/api/gastos/postGastosGenerales
 Content-Type: application/json
 
@@ -49,3 +51,5 @@ Content-Type: application/json
     "provincia" : "1",
     "zona" : "2"
 }
+###
+DELETE http://localhost:8000/api/gastos/deleteGastoGeneral/30018

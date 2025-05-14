@@ -136,6 +136,64 @@ export const getMarcas = async (req: Request, res: Response) => {
     }
 }
 
+export const deleteGastoGeneral = async (req: Request, res: Response): Promise<any> => {
+
+    const { id }  = req.params;
+
+    if (!id) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe ingresar un Gasto de Servicio Público.",
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        
+        const result = await pool.request().input('id_pago', sql.Int, id).query(querys.DeleteGastoGeneral);
+        
+        return res.json({
+            status: 200,
+            ok: true,
+            msg: "El Gasto fue borrado con éxito.",
+            result,
+        });
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error);  
+        return res.json({
+            status: 500,
+            ok: false,
+            msg: "Error al borrar Gastos.",
+            error,
+        });
+    }
+}
+
+export const GetGastosGenerales = async (req: Request, res: Response) => {
+    
+    const pool = await connectToDatabase();
+
+    const result = await pool.request().query(querys.GetGastosGenerales);
+
+    console.log(result.recordset);
+
+    if (result) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
+
+
 export const postLocalidad = async (req:Request, res:Response): Promise<any> => {
     const { body } = req;
     
