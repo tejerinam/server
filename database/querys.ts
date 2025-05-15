@@ -9,7 +9,7 @@ export default {
 
     //Querys de Servicios
     GetTiposRazonesSociales: "SELECT id_tipo_razon,tipo FROM Razon_Social_Tipos WHERE id_tipo_razon > 0",
-    GetTipoRazonSocialServiciosPublicos: "SELECT id_tipo_razon, tipo FROM Razon_Social_Tipos WHERE tipo = 'servicios publicos'",
+    GetTipoRazonSocialServiciosPublicos: "SELECT id_tipo_razon, tipo FROM Razon_Social_Tipos",
     GetRazonesSocialesServiciosPublicos: "SELECT id_razonsocial, razon_social, id_tipo_razon FROM Razones_Sociales WHERE id_tipo_razon = (SELECT id_tipo_razon FROM Razon_Social_Tipos WHERE tipo = 'servicios publicos')",
     GetTipoProductoServiciosPublicos: "SELECT id_tipo,tipo_producto,descripcion FROM Tipos_Productos WHERE tipo_producto = 'servicios públicos'",
     InsertRazonSocialServicioPublico: "INSERT INTO Razones_Sociales (razon_social,id_tipo_razon,web) VALUES (@razon_social, @id_tipo_razon, @web)",

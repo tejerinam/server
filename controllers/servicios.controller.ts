@@ -283,6 +283,9 @@ export const postRazonSocialServicioPublico = async (req: Request, res: Response
         
         let web = body.web || null;
 
+        if (body.id_tipo_razon || body.id_tipo_razon !== 0)
+            id_tipoRazonSocial = body.id_tipo_razon;
+
         result = await pool.request()
             .input('razon_social', sql.VarChar, body.razon_social)
             .input('id_tipo_razon', sql.Int, id_tipoRazonSocial)
