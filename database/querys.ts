@@ -45,4 +45,8 @@ export default {
     GetGastosGenerales: "SELECT g.importe,g.periodo,g.id_pago,dg.descripcion,mp.marca,tp.descripcion 'tipo',detalle FROM Gastos as g INNER JOIN Descripcion_Gastos as dg ON g.id_gasto = dg.id_gasto LEFT JOIN Marcas_Productos as mp ON mp.id_marca = g.id_marca LEFT JOIN Tipos_Productos as tp ON tp.id_tipo = g.id_tipo WHERE id_pago > 0 AND g.id_tipo <> (SELECT id_tipo FROM Tipos_Productos WHERE id_tipo > 0 AND  tipo_producto = 'servicios públicos') ORDER BY periodo ASC",
     DeleteGastoGeneral: "DELETE FROM Gastos WHERE id_pago = @id_pago",
     InsertZona: "INSERT INTO Zonas (zona) VALUES (@zona)",
+    InsertAgendaGasto: "INSERT INTO Agenda_Gastos (descripcion,fecha_alta,alerta,fecha_limite,id_usuario) VALUES (@descripcion,@fecha_alta,@alerta,@fecha_limite,@id_usuario)",
+    GetAgendaGastos: "SELECT id_agenda,descripcion,fecha_alta,alerta,fecha_limite,id_usuario FROM Agenda_Gastos WHERE id_agenda > 0;",
+    DeleteItemsAgendaGasto: "DELETE FROM Agenda_Gastos_Detalle WHERE id_agenda = @id_agenda;",
+    DeleteAgendaGasto: "DELETE FROM Agenda_Gastos WHERE id_agenda = @id_agenda;",
 }

@@ -136,6 +136,28 @@ export const getMarcas = async (req: Request, res: Response) => {
     }
 }
 
+export const getAgendaGastos = async (req: Request, res: Response) => {
+    
+    const pool = await connectToDatabase();
+
+    const result = await pool.request().query(querys.GetAgendaGastos);
+
+    console.log(result.recordset);
+
+    if (result) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
 export const deleteGastoGeneral = async (req: Request, res: Response): Promise<any> => {
 
     const { id }  = req.params;
@@ -170,6 +192,56 @@ export const deleteGastoGeneral = async (req: Request, res: Response): Promise<a
     }
 }
 
+export const deleteAgendaGasto = async (req: Request, res: Response): Promise<any> => {
+
+    const { id }  = req.params;
+
+    if (!id) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe ingresar un Item Agenda.",
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        
+        let result = await pool.request().input('id_agenda', sql.Int, id).query(querys.DeleteItemsAgendaGasto);
+
+        console.log(result);
+
+        result = await pool.request().input('id_agenda', sql.Int, id).query(querys.DeleteAgendaGasto);
+
+        console.log(result);
+        
+        if (result.rowsAffected[0] === 1) {
+            return res.json({
+                status: 200,
+                ok: true,
+                msg: "El Gasto fue borrado con éxito.",
+                result,
+            });
+        }
+        else {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "El Gasto no se borro.",
+                result,
+            });
+        }
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error);  
+        return res.json({
+            status: 500,
+            ok: false,
+            msg: "Error al borrar Gastos.",
+            error,
+        });
+    }
+}
+
 export const GetGastosGenerales = async (req: Request, res: Response) => {
     
     const pool = await connectToDatabase();
@@ -192,6 +264,55 @@ export const GetGastosGenerales = async (req: Request, res: Response) => {
     }
 }
 
+export const postAgendaGasto = async (req:Request, res:Response): Promise<any> => {
+    const { body } = req;
+    
+    console.log(body);
+
+    if (!body.descripcion) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe ingresar una Descripción.",
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        
+        const result = await pool.request()
+                                .input('descripcion', sql.VarChar, body.descripcion)
+                                .input('fecha_alta', sql.DateTime, body.fecha_alta)
+                                .input('alerta', sql.Bit, body.alerta)
+                                .input('fecha_limite', sql.DateTime, body.fecha_limite)
+                                .input('id_usuario', sql.Int, body.id_usuario)
+                                .query(querys.InsertAgendaGasto);
+        
+        console.log(result);
+
+        if (result.rowsAffected[0] === 0) {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "El item en la agenda no se ingreso."
+            });
+        }
+
+        return res.json({
+            status: 200,
+            ok: true,
+            msg: "Agenda Creada.",
+            result,
+        });
+    } catch (error) {
+        return res.json({
+            status: 500,
+            ok: false,
+            msg: "Error al crear Agenda.",
+            error,
+        });
+    }
+}
 
 export const postZona = async (req:Request, res:Response): Promise<any> => {
     const { body } = req;
@@ -238,7 +359,6 @@ export const postZona = async (req:Request, res:Response): Promise<any> => {
         });
     }
 }
-
 
 export const postLocalidad = async (req:Request, res:Response): Promise<any> => {
     const { body } = req;

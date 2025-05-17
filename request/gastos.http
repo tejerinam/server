@@ -12,6 +12,8 @@ GET http://localhost:8000/api/gastos/GetRazonIdByIdDireccion?id=1
 ###
 GET http://localhost:8000/api/gastos/getGastosGenerales
 ###
+GET http://localhost:8000/api/gastos/getAgendaGastos
+###
 POST http://localhost:8000/api/gastos/postGastosGenerales
 Content-Type: application/json
 
@@ -52,11 +54,25 @@ Content-Type: application/json
     "zona" : "2"
 }
 ###
-DELETE http://localhost:8000/api/gastos/deleteGastoGeneral/30018
-###
 POST http://localhost:8000/api/gastos/postZona
 Content-Type: application/json
 
 {
     "zona" : "Prueba"
 }
+###
+POST http://localhost:8000/api/gastos/postAgendaGasto
+Content-Type: application/json
+
+{
+    "descripcion" : "Descripcion Agenda 1",
+    "fecha_alta" : "2025-05-17T16:45:00Z",
+    "alerta":1,
+    "fecha_limite":"2025-05-30T00:00:00",
+    "id_usuario":1
+}
+###
+DELETE http://localhost:8000/api/gastos/deleteGastoGeneral/30018
+###
+DELETE http://localhost:8000/api/gastos/deleteAgendaGasto/6
+###
