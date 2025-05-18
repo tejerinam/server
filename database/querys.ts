@@ -49,4 +49,7 @@ export default {
     GetAgendaGastos: "SELECT id_agenda,descripcion,fecha_alta,alerta,fecha_limite,id_usuario FROM Agenda_Gastos WHERE id_agenda > 0;",
     DeleteItemsAgendaGasto: "DELETE FROM Agenda_Gastos_Detalle WHERE id_agenda = @id_agenda;",
     DeleteAgendaGasto: "DELETE FROM Agenda_Gastos WHERE id_agenda = @id_agenda;",
+    InsertAgendaGastoItem: "INSERT INTO Agenda_Gastos_Detalle (id_agenda,id_tipo,id_marca,importe,realizada,fecha,periodo,cantidad,importeporunidad,detalle) VALUES (@id_agenda,@id_tipo,@id_marca,@importe,@realizada,@fecha,@periodo,@cantidad,@importeporunidad,@detalle)",
+    GetAgendaGastosItems: "SELECT id_agenda,id_tipo,id_marca,importe,realizada,fecha,periodo,cantidad,importeporunidad, id_agendaitem, detalle FROM Agenda_Gastos_Detalle WHERE id_agenda = @id_agenda;",
+    deleteAgendaItem: "DELETE FROM Agenda_Gastos_Detalle WHERE id_agendaitem = @id_agendaitem;",
 }

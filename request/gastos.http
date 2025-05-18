@@ -14,6 +14,8 @@ GET http://localhost:8000/api/gastos/getGastosGenerales
 ###
 GET http://localhost:8000/api/gastos/getAgendaGastos
 ###
+GET http://localhost:8000/api/gastos/getAgendaGastosItems?id_agenda=1
+###
 POST http://localhost:8000/api/gastos/postGastosGenerales
 Content-Type: application/json
 
@@ -72,7 +74,24 @@ Content-Type: application/json
     "id_usuario":1
 }
 ###
+POST http://localhost:8000/api/gastos/postAgendaGastoItem
+Content-Type: application/json
+
+{
+    "id_tipo": 1,
+    "id_marca" : 2,
+    "cantidad" : 3,
+    "importe" : 135.23,
+    "periodo" : "2025-05-18T15:57:00Z",
+    "importeporunidad" : 1,
+    "realizada" : false,
+    "detalle" : "Prueba de inserción Agenda Item",
+    "id_agenda" : 9
+}
+###
 DELETE http://localhost:8000/api/gastos/deleteGastoGeneral/30018
 ###
 DELETE http://localhost:8000/api/gastos/deleteAgendaGasto/6
 ###
+DELETE http://localhost:8000/api/gastos/deleteAgendaItem/1
+

@@ -242,6 +242,54 @@ export const deleteAgendaGasto = async (req: Request, res: Response): Promise<an
     }
 }
 
+export const deleteAgendaItem = async (req: Request, res: Response): Promise<any> => {
+
+     const { id_agendaitem }  = req.params;
+
+    if (id_agendaitem === "0") {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe ingresar un Item Agenda.",
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        
+        let result = await pool.request()
+                               .input('id_agendaitem', sql.Int, id_agendaitem)
+                               .query(querys.deleteAgendaItem);
+
+        console.log(result);
+
+        if (result.rowsAffected[0] === 1) {
+            return res.json({
+                status: 200,
+                ok: true,
+                msg: "El Item fue borrado con éxito.",
+                result,
+            });
+        }
+        else {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "El Item no se borro.",
+                result,
+            });
+        }
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error);  
+        return res.json({
+            status: 500,
+            ok: false,
+            msg: "Error al borrar Gastos.",
+            error,
+        });
+    }
+}
+
 export const GetGastosGenerales = async (req: Request, res: Response) => {
     
     const pool = await connectToDatabase();
@@ -263,6 +311,31 @@ export const GetGastosGenerales = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const getAgendaGastosItems = async (req: Request, res: Response) => {
+    
+    const { id_agenda } = req.query;
+
+    const pool = await connectToDatabase();
+
+    const result = await pool.request().input("id_agenda", sql.Int, id_agenda).query(querys.GetAgendaGastosItems);
+
+    console.log(result.recordset);
+
+    if (result) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
 
 export const postAgendaGasto = async (req:Request, res:Response): Promise<any> => {
     const { body } = req;
@@ -557,4 +630,49 @@ export const postGastosGenerales = async (req:Request, res:Response): Promise<an
                 error,
             });
         }
+}
+
+export const postAgendaGastoItem = async (req:Request, res:Response): Promise<any> => {
+    const { body } = req;
+    
+    console.log(body);
+
+    if (!body.id_agenda || body.id_agenda === 0) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe ingresar un Id de Agenda.",
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        
+        const result = await pool.request().input('id_agenda', sql.Int, body.id_agenda)
+                                    .input('id_tipo', sql.Int, body.id_tipo)
+                                    .input('id_marca', sql.Int, body.id_marca)
+                                    .input('importe', sql.Decimal, body.importe)
+                                    .input('realizada', sql.Bit, body.realizada)
+                                    .input('fecha', sql.Date, new Date())
+                                    .input('periodo', sql.Date, body.periodo)
+                                    .input('cantidad', sql.Decimal, body.cantidad)
+                                    .input('detalle', sql.VarChar, body.detalle)
+                                    .input('importeporunidad', sql.Bit, body.importeporunidad)
+                                    .query(querys.InsertAgendaGastoItem);
+        
+        return res.json({
+            status: 200,
+            ok: true,
+            msg: "Item de Agenda Gasto fue Creado con éxito.",
+            result,
+        });
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error);  
+        return res.json({
+            status: 500,
+            ok: true,
+            msg: "Error al crear Item de Agenda Gasto.",
+            error,
+        });
+    }
 }
