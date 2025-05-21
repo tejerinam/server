@@ -3,7 +3,7 @@ import { getProductosGastos, getMarcas, GetDireccionGastosGenerales, postGastosG
     GetRazonIdByIdDireccion, postTipoProducto, postMarca, GetProvincias, GetZonas,
     postLocalidad, GetGastosGenerales, deleteGastoGeneral, postZona, postAgendaGasto,
     getAgendaGastos, deleteAgendaGasto, postAgendaGastoItem, getAgendaGastosItems,
-    deleteAgendaItem } from '../controllers/gastos.controller';
+    deleteAgendaItem, GetDireccionGastos, GetListadoDeCompras } from '../controllers/gastos.controller';
 
 const router = Router();
 
@@ -11,11 +11,13 @@ router.get('/', getProductosGastos);
 router.get('/getMarcas', getMarcas);
 router.get('/GetRazonIdByIdDireccion',GetRazonIdByIdDireccion)
 router.get('/GetDireccionGastosGenerales', GetDireccionGastosGenerales);
+router.get('/GetDireccionGastos', GetDireccionGastos);
 router.get('/getProvincias',GetProvincias);
 router.get('/getZonas', GetZonas);
 router.get('/getGastosGenerales', GetGastosGenerales);
 router.get('/getAgendaGastos', getAgendaGastos);
 router.get('/getAgendaGastosItems', getAgendaGastosItems);
+router.get('/GetListadoDeCompras/:id_gasto/:id_direccion/:id_tipo/:id_marca/:comprado', GetListadoDeCompras);
 router.post('/postGastosGenerales', postGastosGenerales);
 router.post('/postTipoProducto', postTipoProducto)
 router.post('/postMarca', postMarca);

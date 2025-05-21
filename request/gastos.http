@@ -8,6 +8,8 @@ GET http://localhost:8000/api/gastos/getZonas
 ###
 GET http://localhost:8000/api/gastos/GetDireccionGastosGenerales
 ###
+GET http://localhost:8000/api/gastos/GetDireccionGastos
+###
 GET http://localhost:8000/api/gastos/GetRazonIdByIdDireccion?id=1
 ###
 GET http://localhost:8000/api/gastos/getGastosGenerales
@@ -15,6 +17,8 @@ GET http://localhost:8000/api/gastos/getGastosGenerales
 GET http://localhost:8000/api/gastos/getAgendaGastos
 ###
 GET http://localhost:8000/api/gastos/getAgendaGastosItems?id_agenda=1
+###
+GET http://localhost:8000/api/gastos/GetListadoDeCompras/0/0/0/0/1
 ###
 POST http://localhost:8000/api/gastos/postGastosGenerales
 Content-Type: application/json

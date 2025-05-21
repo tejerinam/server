@@ -66,6 +66,102 @@ export const GetProvincias = async (req: Request, res: Response) => {
     }
 }
 
+export const GetListadoDeCompras = async (req: Request, res: Response) => {
+    const { id_gasto, id_direccion, id_tipo, id_marca, comprado } = req.params;
+
+    console.log(id_gasto, id_direccion, id_tipo, id_marca, comprado);
+    console.log(id_gasto.trim().length, id_direccion.trim().length, id_tipo.trim().length, id_marca.trim().length, comprado.trim().length);
+
+    const pool = await connectToDatabase();
+
+    let where : string = 'WHERE ';
+
+    if (id_gasto.trim() !== '0') {
+        where += `g.id_gasto = ${id_gasto} `;
+    }
+
+    if (id_direccion.trim() !== '0') {
+        if (where.indexOf('=') !== -1) {
+            where += `AND g.id_direccion = ${id_direccion} `;
+        }
+        else {
+            where += `g.id_direccion = ${id_direccion} `;
+        }
+    }
+    
+    if (id_tipo.trim() !== '0') {
+        if (where.indexOf('=') !== -1) {
+            where += `AND g.id_tipo = ${id_tipo} `;
+        }
+        else {
+            where += `g.id_tipo = ${id_tipo} `;
+        }
+    }
+
+    if (id_marca.trim() !== '0') {
+        if (where.indexOf('=') !== -1) {
+            where += `AND g.id_marca = ${id_marca} `;
+        }
+        else {
+            where += `g.id_marca = ${id_marca} `;
+        }
+    }
+
+    if (comprado.trim() !== '3') {
+        if (where.indexOf('=') !== -1) {
+            where += `AND g.realizada = ${comprado} `;
+        }
+        else {
+            where += `g.realizada = ${comprado} `;
+        }
+    }
+
+    if (where === 'WHERE ') {
+        where = '';
+    }
+
+    console.log('WHERE: ', where);
+
+    const result = await pool.request().query(querys.GetListadoDeCompras + where);
+
+    console.log(result.recordset);
+
+    if (result) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
+export const GetDireccionGastos = async (req: Request, res: Response) => {
+
+    const pool = await connectToDatabase();
+
+    const result = await pool.request().query(querys.GetDireccionGastos);
+
+    console.log(result.recordset);
+
+    if (result) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
 export const GetDireccionGastosGenerales = async (req: Request, res: Response) => {
 
     const pool = await connectToDatabase();
