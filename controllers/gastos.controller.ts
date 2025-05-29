@@ -338,6 +338,54 @@ export const deleteAgendaGasto = async (req: Request, res: Response): Promise<an
     }
 }
 
+export const deletePresupuesto = async (req: Request, res: Response): Promise<any> => {
+    const { id_presupuesto }  = req.params; 
+
+    if (!id_presupuesto) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe ingresar un Presupuesto.",
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        
+        let result = await pool.request()
+                               .input('id_presupuesto', sql.Int, id_presupuesto)
+                               .query(querys.deletePresupuesto);
+
+        console.log(result);
+
+        if (result.rowsAffected[0] === 1) {
+            return res.json({
+                status: 200,
+                ok: true,
+                msg: "El Presupuesto fue borrado con éxito.",
+                result,
+            });
+        }
+        else {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "El Presupuesto no se borro.",
+                result,
+            });
+        }
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error);  
+        return res.json({
+            status: 500,
+            ok: false,
+            msg: "Error al borrar Presupuesto.",
+            error,
+        });
+    }
+
+}
+
 export const deleteAgendaItem = async (req: Request, res: Response): Promise<any> => {
 
      const { id_agendaitem }  = req.params;
@@ -380,7 +428,7 @@ export const deleteAgendaItem = async (req: Request, res: Response): Promise<any
         return res.json({
             status: 500,
             ok: false,
-            msg: "Error al borrar Gastos.",
+            msg: "Error al borrar Item.",
             error,
         });
     }
@@ -391,6 +439,28 @@ export const GetGastosGenerales = async (req: Request, res: Response) => {
     const pool = await connectToDatabase();
 
     const result = await pool.request().query(querys.GetGastosGenerales);
+
+    console.log(result.recordset);
+
+    if (result) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
+export const getPresupuestos = async (req: Request, res: Response) => {
+    
+    const pool = await connectToDatabase();
+
+    const result = await pool.request().query(querys.GetPresupuestos);
 
     console.log(result.recordset);
 
@@ -432,6 +502,58 @@ export const getAgendaGastosItems = async (req: Request, res: Response) => {
     }
 }
 
+export const postGrabarPresupuesto = async (req:Request, res:Response): Promise<any> => {
+    const { body } = req;
+
+    console.log(body);
+    if (!body.descripcion || body.descripcion === '' ||
+        !body.anio || body.anio === 0 ||
+        !body.mes || body.mes === 0 ||
+        !body.importe || body.importe === 0) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe ingresar una Descripción, mes, año e importe.",
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        
+        const result = await pool.request()
+                                .input('descripcion', sql.VarChar, body.descripcion)
+                                .input('anio', sql.Int, body.anio)
+                                .input('mes', sql.Int, body.mes)
+                                .input('total', sql.Decimal, body.importe)
+                                .input('id_usuario', sql.Int, body.id_usuario)
+                                .input('fecha_alta', sql.DateTime, body.fecha_alta)
+                                .query(querys.InsertarPresupuesto);
+        
+        console.log(result);
+
+        if (result.rowsAffected[0] === 0) {
+            return res.json({
+                status: 400,
+                ok: false,
+                msg: "El Presupuesto no se ingreso."
+            });
+        }
+
+        return res.json({
+            status: 200,
+            ok: true,
+            msg: "Presupuesto Creado.",
+            result,
+        });
+    } catch (error) {
+        return res.json({
+            status: 500,
+            ok: false,
+            msg: "Error al crear Presupuesto.",
+            error,
+        });
+    }
+}
 
 export const postAgendaGasto = async (req:Request, res:Response): Promise<any> => {
     const { body } = req;

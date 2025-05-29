@@ -18,7 +18,9 @@ GET http://localhost:8000/api/gastos/getAgendaGastos
 ###
 GET http://localhost:8000/api/gastos/getAgendaGastosItems?id_agenda=1
 ###
-GET http://localhost:8000/api/gastos/GetListadoDeCompras/0/0/0/0/1
+GET http://localhost:8000/api/gastos/GetListadoDeCompras/0/0/0/0/3
+###
+GET http://localhost:8000/api/gastos/getPresupuestos
 ###
 POST http://localhost:8000/api/gastos/postGastosGenerales
 Content-Type: application/json
@@ -93,9 +95,23 @@ Content-Type: application/json
     "id_agenda" : 9
 }
 ###
+POST http://localhost:8000/api/gastos/postGrabarPresupuesto
+Content-Type: application/json
+
+{
+    "mes" : 1,
+    "anio" : 2025,
+    "importe" : "12556,23",
+    "fecha_alta" : "2025-05-28T00:00:00Z",
+    "id_usuario" : 1,
+    "descripcion" : "Prueba Presupuesto"
+}
+###
 DELETE http://localhost:8000/api/gastos/deleteGastoGeneral/30018
 ###
 DELETE http://localhost:8000/api/gastos/deleteAgendaGasto/6
 ###
 DELETE http://localhost:8000/api/gastos/deleteAgendaItem/1
+###
+DELETE http://localhost:8000/api/gastos/deletePresupuesto/1
 

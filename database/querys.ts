@@ -54,4 +54,7 @@ export default {
     deleteAgendaItem: "DELETE FROM Agenda_Gastos_Detalle WHERE id_agendaitem = @id_agendaitem;",
     GetDireccionGastos: "SELECT id_direccion, TRIM(direccion + ' ' + numero + ' ' + isnull(loc.localidad,'') + ' ' + ISNULL(p.provincia,'') + ' (' + razon_social + ')') as 'direccion' FROM Razones_Sociales AS rs INNER JOIN Locales AS l ON l.id_razonsocial = rs.id_razonsocial LEFT JOIN Localidad AS loc ON loc.id_localidad = l.id_localidad LEFT JOIN Provincias AS p ON p.id_provincia = loc.id_provincia WHERE l.id_direccion > 0;",
     GetListadoDeCompras:"SELECT id_pago, importe, periodo, realizada, detalle, cantidad, importeporunidad, dg.descripcion, tp.descripcion 'tipoproducto', mp.marca FROM Gastos AS g LEFT JOIN Descripcion_Gastos AS dg ON dg.id_gasto = g.id_gasto LEFT jOIN Tipos_Productos AS tp ON tp.id_tipo = g.id_tipo LEFT JOIN Marcas_Productos AS mp ON mp.id_marca = g.id_marca ",
+    InsertarPresupuesto: "INSERT INTO Presupuestos (mes,anio,Total,fecha_alta,id_usuario,descripcion) VALUES (@mes,@anio,@total,@fecha_alta,@id_usuario,@descripcion)",
+    GetPresupuestos: "SELECT id_presupuesto,mes,anio,Total 'importe',fecha_alta,id_usuario,descripcion FROM Presupuestos WHERE id_presupuesto > 0;",
+    deletePresupuesto: "DELETE FROM Presupuestos WHERE id_presupuesto = @id_presupuesto",
 }
