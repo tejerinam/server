@@ -20,6 +20,8 @@ GET http://localhost:8000/api/gastos/getAgendaGastosItems?id_agenda=1
 ###
 GET http://localhost:8000/api/gastos/GetListadoDeCompras/0/0/0/0/3
 ###
+GET http://localhost:8000/api/gastos/getTotalPresupuesto/5/2025
+###
 GET http://localhost:8000/api/gastos/getPresupuestos
 ###
 POST http://localhost:8000/api/gastos/postGastosGenerales
@@ -114,4 +116,15 @@ DELETE http://localhost:8000/api/gastos/deleteAgendaGasto/6
 DELETE http://localhost:8000/api/gastos/deleteAgendaItem/1
 ###
 DELETE http://localhost:8000/api/gastos/deletePresupuesto/1
+###
+PUT http://localhost:8000/api/gastos/putPresupuesto/3
+Content-Type: application/json
 
+{
+    "id_presupuesto" : "3",
+    "mes" : 3,
+    "descripcion" : "Presupuesto Marzo",
+    "anio" : 2025,
+    "importe" : 100000.24
+}
+###

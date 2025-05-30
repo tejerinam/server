@@ -12,4 +12,15 @@ export async function connectToDatabase() {
   }
 };
 
+export async function closeDatabaseConnection(pool: sql.ConnectionPool) {
+  try {
+    await pool.close();
+    console.log('Conexión a la base cerrada');
+  } catch (error) { 
+
+    console.error('Error al cerrar la conexión a la base:', error);
+    throw error;
+  } 
+}
+
 export {sql};

@@ -57,4 +57,10 @@ export default {
     InsertarPresupuesto: "INSERT INTO Presupuestos (mes,anio,Total,fecha_alta,id_usuario,descripcion) VALUES (@mes,@anio,@total,@fecha_alta,@id_usuario,@descripcion)",
     GetPresupuestos: "SELECT id_presupuesto,mes,anio,Total 'importe',fecha_alta,id_usuario,descripcion FROM Presupuestos WHERE id_presupuesto > 0;",
     deletePresupuesto: "DELETE FROM Presupuestos WHERE id_presupuesto = @id_presupuesto",
+    GetTotalPresupuesto: "SELECT SUM(total) as total FROM (" +
+                         "SELECT isnull(SUM(CASE ISNULL(importeporunidad,0) WHEN 1 THEN cantidad*importe ELSE importe END),0) total FROM Gastos WHERE realizada = 1 AND MONTH(periodo) = @mes AND YEAR(periodo) = @anio " +
+                         "UNION ALL " +
+                         "SELECT isnull(SUM(CASE ISNULL(importeporunidad,0) WHEN 0 THEN importe ELSE cantidad*importe END),0) total FROM Agenda_Gastos_Detalle WHERE realizada = 1 AND MONTH(periodo) = @mes AND YEAR(periodo) = @anio " +
+                         ") as t;",
+    UpdatePresupuesto: "UPDATE Presupuestos SET mes = @mes, anio = @anio, Total = @importe, descripcion = @descripcion WHERE id_presupuesto = @id_presupuesto",
 }

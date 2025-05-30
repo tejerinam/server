@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { connectToDatabase, sql } from '../database/connection';
+import { connectToDatabase, sql, closeDatabaseConnection } from '../database/connection';
 import querys from '../database/querys';
 
 export const getProductosGastos = async (req: Request, res: Response) => {
@@ -9,6 +9,8 @@ export const getProductosGastos = async (req: Request, res: Response) => {
     const result = await pool.request().query(querys.GetTiposProductosGenerales);
 
     console.log(result.recordset);
+
+    await closeDatabaseConnection(pool);
 
     if (result) {
         res.status(200).json({ 
@@ -31,6 +33,8 @@ export const GetZonas = async (req: Request, res: Response) => {
 
     console.log(result.recordset);
 
+    await closeDatabaseConnection(pool);
+
     if (result) {
         res.status(200).json({ 
             ok: true,
@@ -52,6 +56,8 @@ export const GetProvincias = async (req: Request, res: Response) => {
 
     console.log(result.recordset);
 
+    await closeDatabaseConnection(pool);
+
     if (result) {
         res.status(200).json({ 
             ok: true,
@@ -68,9 +74,6 @@ export const GetProvincias = async (req: Request, res: Response) => {
 
 export const GetListadoDeCompras = async (req: Request, res: Response) => {
     const { id_gasto, id_direccion, id_tipo, id_marca, comprado } = req.params;
-
-    console.log(id_gasto, id_direccion, id_tipo, id_marca, comprado);
-    console.log(id_gasto.trim().length, id_direccion.trim().length, id_tipo.trim().length, id_marca.trim().length, comprado.trim().length);
 
     const pool = await connectToDatabase();
 
@@ -126,6 +129,8 @@ export const GetListadoDeCompras = async (req: Request, res: Response) => {
 
     console.log(result.recordset);
 
+    await closeDatabaseConnection(pool);
+
     if (result) {
         res.status(200).json({ 
             ok: true,
@@ -148,6 +153,8 @@ export const GetDireccionGastos = async (req: Request, res: Response) => {
 
     console.log(result.recordset);
 
+    await closeDatabaseConnection(pool);
+
     if (result) {
         res.status(200).json({ 
             ok: true,
@@ -169,6 +176,8 @@ export const GetDireccionGastosGenerales = async (req: Request, res: Response) =
     const result = await pool.request().query(querys.GetDireccionGastosGenerales);
 
     console.log(result.recordset);
+
+    await closeDatabaseConnection(pool);
 
     if (result) {
         res.status(200).json({ 
@@ -196,6 +205,8 @@ export const GetRazonIdByIdDireccion = async (req: Request, res: Response):Promi
 
     console.log(result.recordset);
 
+    await closeDatabaseConnection(pool);
+
     if (result) {
         res.status(200).json({ 
             ok: true,
@@ -218,6 +229,8 @@ export const getMarcas = async (req: Request, res: Response) => {
 
     console.log(result.recordset);
 
+    await closeDatabaseConnection(pool);
+
     if (result) {
         res.status(200).json({ 
             ok: true,
@@ -239,6 +252,8 @@ export const getAgendaGastos = async (req: Request, res: Response) => {
     const result = await pool.request().query(querys.GetAgendaGastos);
 
     console.log(result.recordset);
+
+    await closeDatabaseConnection(pool);
 
     if (result) {
         res.status(200).json({ 
@@ -270,6 +285,8 @@ export const deleteGastoGeneral = async (req: Request, res: Response): Promise<a
         const pool = await connectToDatabase();
         
         const result = await pool.request().input('id_pago', sql.Int, id).query(querys.DeleteGastoGeneral);
+
+        await closeDatabaseConnection(pool);
         
         return res.json({
             status: 200,
@@ -310,6 +327,8 @@ export const deleteAgendaGasto = async (req: Request, res: Response): Promise<an
         result = await pool.request().input('id_agenda', sql.Int, id).query(querys.DeleteAgendaGasto);
 
         console.log(result);
+
+        await closeDatabaseConnection(pool);
         
         if (result.rowsAffected[0] === 1) {
             return res.json({
@@ -357,6 +376,8 @@ export const deletePresupuesto = async (req: Request, res: Response): Promise<an
                                .query(querys.deletePresupuesto);
 
         console.log(result);
+
+        await closeDatabaseConnection(pool);
 
         if (result.rowsAffected[0] === 1) {
             return res.json({
@@ -407,6 +428,8 @@ export const deleteAgendaItem = async (req: Request, res: Response): Promise<any
 
         console.log(result);
 
+        await closeDatabaseConnection(pool);
+
         if (result.rowsAffected[0] === 1) {
             return res.json({
                 status: 200,
@@ -442,6 +465,8 @@ export const GetGastosGenerales = async (req: Request, res: Response) => {
 
     console.log(result.recordset);
 
+    await closeDatabaseConnection(pool);
+
     if (result) {
         res.status(200).json({ 
             ok: true,
@@ -463,6 +488,8 @@ export const getPresupuestos = async (req: Request, res: Response) => {
     const result = await pool.request().query(querys.GetPresupuestos);
 
     console.log(result.recordset);
+
+    await closeDatabaseConnection(pool);
 
     if (result) {
         res.status(200).json({ 
@@ -487,6 +514,8 @@ export const getAgendaGastosItems = async (req: Request, res: Response) => {
     const result = await pool.request().input("id_agenda", sql.Int, id_agenda).query(querys.GetAgendaGastosItems);
 
     console.log(result.recordset);
+
+    await closeDatabaseConnection(pool);
 
     if (result) {
         res.status(200).json({ 
@@ -524,12 +553,14 @@ export const postGrabarPresupuesto = async (req:Request, res:Response): Promise<
                                 .input('descripcion', sql.VarChar, body.descripcion)
                                 .input('anio', sql.Int, body.anio)
                                 .input('mes', sql.Int, body.mes)
-                                .input('total', sql.Decimal, body.importe)
+                                .input('total', sql.Float, body.importe)
                                 .input('id_usuario', sql.Int, body.id_usuario)
                                 .input('fecha_alta', sql.DateTime, body.fecha_alta)
                                 .query(querys.InsertarPresupuesto);
         
         console.log(result);
+
+        await closeDatabaseConnection(pool);
 
         if (result.rowsAffected[0] === 0) {
             return res.json({
@@ -581,6 +612,8 @@ export const postAgendaGasto = async (req:Request, res:Response): Promise<any> =
         
         console.log(result);
 
+        await closeDatabaseConnection(pool);
+
         if (result.rowsAffected[0] === 0) {
             return res.json({
                 status: 400,
@@ -626,6 +659,8 @@ export const postZona = async (req:Request, res:Response): Promise<any> => {
                                 .query(querys.InsertZona);
         
         console.log(result);
+
+        await closeDatabaseConnection(pool);
 
         if (result.rowsAffected[0] === 0) {
             return res.json({
@@ -674,7 +709,9 @@ export const postLocalidad = async (req:Request, res:Response): Promise<any> => 
                                 .query(querys.InsertLocalidad);
         
         console.log(result);
-
+        
+        await closeDatabaseConnection(pool);
+        
         if (result.rowsAffected[0] === 0) {
             return res.json({
                 status: 400,
@@ -720,6 +757,8 @@ export const postMarca = async (req:Request, res:Response): Promise<any> => {
                                 .query(querys.InsertMarca);
         
         console.log(result);
+
+        await closeDatabaseConnection(pool);
 
         if (result.rowsAffected[0] === 0) {
             return res.json({
@@ -767,6 +806,8 @@ export const postTipoProducto = async (req:Request, res:Response): Promise<any> 
                                 .query(querys.InsertTipoProducto);
         
         console.log(result);
+
+        await closeDatabaseConnection(pool);
 
         if (result.rowsAffected[0] === 0) {
             return res.json({
@@ -820,7 +861,7 @@ export const postGastosGenerales = async (req:Request, res:Response): Promise<an
     
             let id_razonsocial = result.recordset[0].id_razonsocial;
             
-            result = await pool.request().input('importe', sql.Decimal, body.importe)
+            result = await pool.request().input('importe', sql.Float, body.importe)
                                         .input('fecha_registro', sql.DateTime, body.fecha_registro)
                                         .input('periodo', sql.DateTime!, body.periodo ? body.periodo : null)
                                         .input('id_usuario', sql.Int, body.id_usuario)
@@ -832,6 +873,8 @@ export const postGastosGenerales = async (req:Request, res:Response): Promise<an
                                         .input('id_razonsocial', sql.Int!, id_razonsocial ? id_razonsocial : null)
                                         .input('id_marca', sql.Int!, body.id_marca ? body.id_marca : null)
                                         .query(querys.InsertGastosGenerales);
+
+            await closeDatabaseConnection(pool);
             
             return res.json({
                 status: 200,
@@ -869,7 +912,7 @@ export const postAgendaGastoItem = async (req:Request, res:Response): Promise<an
         const result = await pool.request().input('id_agenda', sql.Int, body.id_agenda)
                                     .input('id_tipo', sql.Int, body.id_tipo)
                                     .input('id_marca', sql.Int, body.id_marca)
-                                    .input('importe', sql.Decimal, body.importe)
+                                    .input('importe', sql.Float, body.importe)
                                     .input('realizada', sql.Bit, body.realizada)
                                     .input('fecha', sql.Date, new Date())
                                     .input('periodo', sql.Date, body.periodo)
@@ -878,6 +921,8 @@ export const postAgendaGastoItem = async (req:Request, res:Response): Promise<an
                                     .input('importeporunidad', sql.Bit, body.importeporunidad)
                                     .query(querys.InsertAgendaGastoItem);
         
+        await closeDatabaseConnection(pool);
+
         return res.json({
             status: 200,
             ok: true,
@@ -894,3 +939,124 @@ export const postAgendaGastoItem = async (req:Request, res:Response): Promise<an
         });
     }
 }
+
+export const putPresupuesto = async (req: Request, res: Response): Promise<any> => {
+
+    const { body } = req;
+    const { id_presupuesto } = req.params;
+
+    console.clear();
+
+    console.log('------------------------------------------------');
+    console.log('Presupuesto a Actualizar: ', id_presupuesto);
+    console.log('------------------------------------------------');
+
+    console.log('------------------------------------------------');
+    console.log(body);
+    console.log('------------------------------------------------');
+
+    if (!body.id_presupuesto || body.id_presupuesto === undefined) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe seleccionar un presupuesto.",
+        });
+    }
+
+    if (body.id_presupuesto !== id_presupuesto) {
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "Debe no coinciden los id de presupuesto.",
+        });
+    }
+
+    try {
+        const pool = await connectToDatabase();
+
+        console.log('------------------------------------------------');
+        console.log(querys.UpdatePresupuesto);
+        console.log('------------------------------------------------');
+
+       /*  "mes": presupuesto.mes,
+        "anio": presupuesto.anio,
+        "importe": presupuesto.importe,
+        "descripcion": presupuesto.descripcion,
+        "id_presupuesto": presupuesto.id_presupuesto
+ */
+        const result = await pool.request().input('id_presupuesto', sql.Int, body.id_presupuesto)
+            .input('mes', sql.Int, body.mes)
+            .input('descripcion', sql.NVarChar(255), body.descripcion)
+            .input('anio', sql.Int, body.anio)
+            .input('importe', sql.Float, Number(Number(body.importe).toFixed(2)))
+            .query(querys.UpdatePresupuesto);
+
+        //"UPDATE Presupuestos SET mes = @mes, anio = @anio, Total = @importe, descripcion = @descripcion WHERE id_presupuesto = @id_presupuesto"
+
+        console.log('------------------------------------------------');
+        console.log(result);
+        console.log('------------------------------------------------');
+
+        await closeDatabaseConnection(pool);
+
+        if (result.rowsAffected[0] === 1) {
+            return res.json({
+                status: 200,
+                ok: true,
+                msg: "Presupuesto Actualizado con éxito.",
+                result,
+            });
+        }
+
+        return res.json({
+            status: 400,
+            ok: false,
+            msg: "El Presupuesto no se Actualizo.",
+            result,
+        });
+    } catch (error) {
+        console.error('Error al conectar a la base de datos:', error);
+        return res.json({
+            status: 500,
+            ok: true,
+            msg: "Error al Actualizar Presupuesto.",
+            error,
+        });
+    }
+}
+
+export const getTotalPresupuesto = async (req: Request, res: Response): Promise<Response | undefined> => {
+    const { mes, anio } = req.params;
+
+    console.log(mes, anio);
+    if (!mes || !anio) {
+        return res.status(400).json({
+            ok: false,
+            msg: 'Debe ingresar un mes y un año.',
+        });
+    }
+    const pool = await connectToDatabase();
+
+    const result = await pool.request()
+        .input('mes', sql.Int, mes)
+        .input('anio', sql.Int, anio)
+        .query(querys.GetTotalPresupuesto);
+
+    console.log(result);
+
+    await closeDatabaseConnection(pool);
+
+    if (result.rowsAffected[0] > 0) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
