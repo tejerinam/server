@@ -24,6 +24,14 @@ GET http://localhost:8000/api/gastos/getTotalPresupuesto/5/2025
 ###
 GET http://localhost:8000/api/gastos/getPresupuestos
 ###
+GET http://localhost:8000/api/gastos/getGastosTipoProductos
+###
+GET http://localhost:8000/api/gastos/getGastosPorPresupuesto
+###
+GET http://localhost:8000/api/gastos/getGastosPorMarcas
+###
+GET http://localhost:8000/api/gastos/getGastosPorLocales
+###
 POST http://localhost:8000/api/gastos/postGastosGenerales
 Content-Type: application/json
 

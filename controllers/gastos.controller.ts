@@ -1025,7 +1025,111 @@ export const putPresupuesto = async (req: Request, res: Response): Promise<any> 
     }
 }
 
-export const getTotalPresupuesto = async (req: Request, res: Response): Promise<Response | undefined> => {
+export const getGastosPorLocales = async (req: Request, res: Response): Promise<any | undefined> => {
+    
+    const pool = await connectToDatabase();
+
+    const result = await pool.request()
+        .input('realizada', sql.Int, 1)
+        .query(querys.getGastosPorLocales);
+
+    console.log(result);
+
+    await closeDatabaseConnection(pool);
+
+    if (result.rowsAffected[0] > 0) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
+export const getGastosPorMarcas = async (req: Request, res: Response): Promise<any | undefined> => {
+    
+    const pool = await connectToDatabase();
+
+    const result = await pool.request()
+        .input('realizada', sql.Int, 1)
+        .query(querys.getGastosPorMarcas);
+
+    console.log(result);
+
+    await closeDatabaseConnection(pool);
+
+    if (result.rowsAffected[0] > 0) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
+export const getGastosPorPresupuesto = async (req: Request, res: Response): Promise<any | undefined> => {
+    
+    const pool = await connectToDatabase();
+
+    const result = await pool.request()
+        .input('realizado', sql.Int, 1)
+        .query(querys.getGastosPorPresupuesto);
+
+    console.log(result);
+
+    await closeDatabaseConnection(pool);
+
+    if (result.rowsAffected[0] > 0) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
+export const getGastosTipoProductos = async (req: Request, res: Response): Promise<any | undefined> => {
+    
+    const pool = await connectToDatabase();
+
+    const result = await pool.request()
+        .input('realizado', sql.Int, 1)
+        .query(querys.getGastosTipoProductos);
+
+    console.log(result);
+
+    await closeDatabaseConnection(pool);
+
+    if (result.rowsAffected[0] > 0) {
+        res.status(200).json({ 
+            ok: true,
+            msg: 'Consulta realizada con éxito',
+            datos: result.recordset,
+        });
+    } else {
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo obtener el resultado de la base de datos.',
+        });
+    }
+}
+
+export const getTotalPresupuesto = async (req: Request, res: Response): Promise<any | undefined> => {
     const { mes, anio } = req.params;
 
     console.log(mes, anio);

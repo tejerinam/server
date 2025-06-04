@@ -63,4 +63,28 @@ export default {
                          "SELECT isnull(SUM(CASE ISNULL(importeporunidad,0) WHEN 0 THEN importe ELSE cantidad*importe END),0) total FROM Agenda_Gastos_Detalle WHERE realizada = 1 AND MONTH(periodo) = @mes AND YEAR(periodo) = @anio " +
                          ") as t;",
     UpdatePresupuesto: "UPDATE Presupuestos SET mes = @mes, anio = @anio, Total = @importe, descripcion = @descripcion WHERE id_presupuesto = @id_presupuesto",
+    getGastosTipoProductos: "SELECT tipo_producto, descripcion, sum(total) 'total', sum(cantidad) 'cantidad' FROM (" +
+                            "Select tipo_producto, descripcion, sum(case importeporunidad WHEN 1 THEN cantidad*importe ELSE importe END) 'total', sum(isnull(cantidad,1)) 'cantidad' " + 
+                            "from Agenda_Gastos_Detalle as agd INNER JOIN Tipos_Productos as tp ON tp.id_tipo = agd.id_tipo WHERE realizada = 1 GROUP BY tp.tipo_producto, tp.descripcion " +
+                            "union all " +
+                            "Select tipo_producto, descripcion, sum(case importeporunidad WHEN 1 THEN cantidad*importe ELSE importe END) 'total', sum(isnull(cantidad,1)) 'cantidad' " + 
+                            "from Gastos as agd INNER JOIN Tipos_Productos as tp ON tp.id_tipo = agd.id_tipo WHERE realizada = 1 GROUP BY tp.tipo_producto, tp.descripcion " +
+                            ") as T WHERE tipo_producto NOT LIKE 'servicios públicos' GROUP BY T.tipo_producto, T.descripcion",
+    getGastosPorPresupuesto: "SELECT descripcion, totalpres, periodo, sum(cantidad) 'cantidad', sum(total) 'total' FROM (" +
+                             "SELECT p.descripcion, p.total 'totalpres', CONCAT(p.mes,'/',p.anio) 'periodo', sum(isnull(cantidad,1)) 'cantidad', sum(case importeporunidad WHEN 1 THEN cantidad*importe ELSE importe END) 'total' " + 
+                             "FROM Presupuestos AS p INNER JOIN Gastos AS g ON p.anio = YEAR(g.periodo) AND p.mes = MONTH(g.periodo) " + 
+                             "WHERE realizada = @realizado GROUP BY p.anio, p.mes, p.Total, p.descripcion " +
+                             "UNION ALL " +
+                             "SELECT p.descripcion, p.total 'totalpres', CONCAT(p.mes,'/',p.anio) 'periodo', sum(isnull(cantidad,1)) 'cantidad', sum(case importeporunidad WHEN 1 THEN cantidad*importe ELSE importe END) 'total' " + 
+                             "FROM Presupuestos AS p INNER JOIN Agenda_Gastos_Detalle AS agd ON p.anio = YEAR(agd.periodo) AND p.mes = MONTH(agd.periodo) " +
+                             "WHERE realizada = @realizado GROUP BY p.anio, p.mes, p.Total, p.descripcion) AS T GROUP BY descripcion, totalpres, periodo",
+    getGastosPorMarcas: "SELECT marca, sum(isnull(cantidad,1)) 'cantidad', sum(total) 'total' FROM ( " +
+                        "SELECT mp.marca, sum(isnull(cantidad,1)) 'cantidad', sum(case importeporunidad WHEN 1 THEN cantidad*importe ELSE importe END) 'total' " +
+                        "FROM Marcas_Productos mp INNER JOIN Agenda_Gastos_Detalle agd ON mp.id_marca = agd.id_marca WHERE realizada = @realizada GROUP BY mp.marca " +
+                        "UNION ALL " +
+                        "SELECT mp.marca, sum(isnull(cantidad,1)) 'cantidad', sum(case importeporunidad WHEN 1 THEN cantidad*importe ELSE importe END) 'total' " +
+                        "FROM Marcas_Productos mp INNER JOIN Gastos g ON mp.id_marca = g.id_marca WHERE realizada = @realizada GROUP BY mp.marca) as T GROUP BY marca",
+    getGastosPorLocales: "SELECT rs.razon_social, rst.tipo, sum(isnull(g.cantidad,1)) 'cantidad', SUM(case isnull(g.importeporunidad,1) WHEN 1 THEN isnull(g.cantidad,1)*g.importe ELSE g.importe END) 'total' " +
+                         "FROM Gastos g INNER JOIN Razones_Sociales rs ON g.id_razonsocial = rs.id_razonsocial INNER JOIN Razon_Social_Tipos rst ON rst.id_tipo_razon = rs.id_tipo_razon " +
+                         "WHERE realizada = @realizada GROUP BY razon_social, tipo",
 }
